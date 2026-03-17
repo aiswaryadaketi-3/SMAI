@@ -4,5 +4,6 @@ __pycache__/
 .env
 risk_model.pkl
 backend/
-requirements.txt
 .DS_Store
+instance/
+*.db
