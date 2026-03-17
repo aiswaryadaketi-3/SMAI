@@ -18,7 +18,6 @@
                 <button onclick="navigate('landing')" class="nav-btn">Home</button>
                 <button onclick="navigate('dashboard')" class="nav-btn">Dashboard</button>
                 <div id="user-profile" class="user-nav">
-                    <!-- Dynamic: Login button or Username -->
                     <button id="login-nav-btn" onclick="openAuthModal()" class="nav-btn neon-border">Login</button>
                     <div id="user-info" class="hidden">
                         <span id="display-username" class="neon-text-pink"></span>
@@ -73,22 +72,18 @@
                     <h2>Behavioral Assessment</h2>
                     <p class="subtitle">Complete the following to help us understand your habits.</p>
                     <form id="assessment-form" onsubmit="handleAssessmentSubmit(event)">
-                        
                         <div class="form-group">
                             <label for="age">Age</label>
                             <input type="number" id="age" min="12" max="100" required placeholder="Enter your age">
                         </div>
-
                         <div class="form-group">
                             <label for="sleep">Sleep Hours (per night): <span id="sleep-val">7</span>h</label>
                             <input type="range" id="sleep" min="0" max="12" value="7" class="slider" oninput="document.getElementById('sleep-val').innerText = this.value">
                         </div>
-
                         <div class="form-group">
                             <label for="stress">Stress Level (1-10): <span id="stress-val">5</span></label>
                             <input type="range" id="stress" min="1" max="10" value="5" class="slider" oninput="document.getElementById('stress-val').innerText = this.value">
                         </div>
-
                         <div class="form-group">
                             <label for="social">Social Activity</label>
                             <select id="social" required>
@@ -98,7 +93,6 @@
                                 <option value="isolated">Isolated</option>
                             </select>
                         </div>
-
                         <div class="form-group toggle-group">
                             <label for="mood">Frequent Mood Swings?</label>
                             <label class="switch">
@@ -106,12 +100,10 @@
                                 <span class="toggle-slider round"></span>
                             </label>
                         </div>
-
                         <div class="form-group">
                             <label for="screen">Screen Time (hours/day): <span id="screen-val">4</span>h</label>
                             <input type="range" id="screen" min="0" max="16" value="4" class="slider" oninput="document.getElementById('screen-val').innerText = this.value">
                         </div>
-
                         <button type="submit" class="btn-primary btn-submit glow-btn">Predict Risk</button>
                     </form>
                 </div>
@@ -125,14 +117,12 @@
                         <div class="risk-level-text" id="risk-label">Low</div>
                     </div>
                     <p class="explanation" id="risk-explanation">Your behavioral patterns show a very stable routine with low risk indicators.</p>
-                    
                     <div class="recommendations">
                         <h3>Personalized Recommendations</h3>
                         <ul id="recommendation-list">
                             <li>Keep up your consistent sleep schedule.</li>
                             <li>Maintain current social engagements.</li>
                         </ul>
-                        
                         <div class="action-buttons">
                             <button class="btn-secondary" onclick="navigate('landing')">Retake Assessment</button>
                             <button class="btn-tertiary">Find Support Resources</button>
@@ -168,7 +158,6 @@
                         <div class="chart-mock line-chart">
                            <svg id="trend-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
                                 <path id="trend-path" d="M0,30 L100,30" fill="none" stroke="#38bdf8" stroke-width="2"/>
-                                <!-- Dots will be added dynamically -->
                            </svg>
                         </div>
                     </div>
