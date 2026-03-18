@@ -20,7 +20,14 @@ load_dotenv()
 # --- FLASK APP CONFIGURATION ---
 app = Flask(__name__, template_folder='template', static_folder='static')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key_12345')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///safemind.db'
+
+# Vercel compatibility: Use /tmp for SQLite in serverless environments
+if os.environ.get('VERCEL') or os.environ.get('SERVERLESS'):
+    db_path = '/tmp/safemind.db'
+else:
+    db_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'safemind.db')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 CORS(app)
@@ -190,11 +197,24 @@ else:
     print("Warning: GEMINI_API_KEY not found in .env")
 
 model_path = os.getenv('MODEL_PATH', 'risk_model.pkl')
-if not os.path.exists(model_path):
-    ml_model = train_risk_model(model_path)
+if os.environ.get('VERCEL') or os.environ.get('SERVERLESS'):
+    # In Vercel, we might need to read from the root but write to /tmp if training is needed
+    # Better to assume it's pre-trained or use /tmp if not found
+    tmp_model_path = os.path.join('/tmp', os.path.basename(model_path))
+    if not os.path.exists(model_path) and not os.path.exists(tmp_model_path):
+        ml_model = train_risk_model(tmp_model_path)
+    elif os.path.exists(model_path):
+        with open(model_path, 'rb') as f:
+            ml_model = pickle.load(f)
+    else:
+        with open(tmp_model_path, 'rb') as f:
+            ml_model = pickle.load(f)
 else:
-    with open(model_path, 'rb') as f:
-        ml_model = pickle.load(f)
+    if not os.path.exists(model_path):
+        ml_model = train_risk_model(model_path)
+    else:
+        with open(model_path, 'rb') as f:
+            ml_model = pickle.load(f)
 
 predictor = RiskPredictor(ml_model)
 
